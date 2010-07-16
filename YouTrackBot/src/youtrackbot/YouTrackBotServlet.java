@@ -4,12 +4,13 @@ import com.google.wave.api.*;
 import com.google.wave.api.event.*;
 
 /**
- * @author jens
+ * @author Jens Jahnke <jan0sch@gmx.net>
+ * @version $Id$
  */
 public class YouTrackBotServlet extends AbstractRobot {
     @Override
     protected String getRobotName() {
-        return "YouTrackBot";
+        return "YouTrack Bot";
     }
 
     @Override
