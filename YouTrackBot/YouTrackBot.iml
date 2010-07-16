@@ -17,6 +17,7 @@
       <facet type="google-app-engine" name="Google App Engine">
         <configuration>
           <sdk-home-path>$MODULE_DIR$/../google-appengine-java</sdk-home-path>
+          <email>jens.jahnke@googlemail.com</email>
         </configuration>
       </facet>
     </facet>
