@@ -61,6 +61,6 @@ public class YouTrackBotServlet extends AbstractRobot {
 
     @Override
     public void onWaveletSelfAdded(WaveletSelfAddedEvent event) {
-        event.getWavelet().reply("\nHi everybody!");
+        event.getWavelet().reply("\nHi everybody! Please use #XX-NN to link to existing tickets where XX is the shortcut for your project and NN the ticket number.");
     }
 }
