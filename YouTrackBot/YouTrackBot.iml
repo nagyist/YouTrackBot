@@ -34,6 +34,7 @@
     <orderEntry type="library" name="AppEngine ORM" level="project" />
     <orderEntry type="library" name="Wave Robot Java Client Library" level="project" />
     <orderEntry type="library" name="Java EE Servlet" level="project" />
+    <orderEntry type="library" name="IntelliJ Idea Annotations" level="project" />
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">
     <option name="_basePreferences">

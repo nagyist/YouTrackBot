@@ -11,7 +11,7 @@
       <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/oauth-20090617.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="http://wave-robot-java-client.googlecode.com/svn/trunk/doc/index.html" />
+      <root url="http://wave-robot-java-client.googlecode.com/svn/trunk/doc/" />
     </JAVADOC>
     <SOURCES />
   </library>

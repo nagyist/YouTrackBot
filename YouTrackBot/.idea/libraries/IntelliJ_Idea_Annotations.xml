@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="IntelliJ Idea Annotations">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/annotations.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
