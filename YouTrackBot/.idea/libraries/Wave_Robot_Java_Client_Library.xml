@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="Wave Robot Java Client Library">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/wave-model-20100528.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/wave-model-util-20100703.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/commons-codec-1.4-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/gson.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/commons-codec-1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/commons-codec-1.4-src.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/wave-robot-api-20100703.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/oauth-20090617.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="http://wave-robot-java-client.googlecode.com/svn/trunk/doc/index.html" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
