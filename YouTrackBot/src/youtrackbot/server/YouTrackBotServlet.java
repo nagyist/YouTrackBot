@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 import java.util.logging.Logger;
 
 /**
+ * The main handler for our wave robot.
+ * 
  * @author Jens Jahnke <jan0sch@gmx.net>
  * @version $Id$
  */
