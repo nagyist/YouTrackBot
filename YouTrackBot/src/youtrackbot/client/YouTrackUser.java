@@ -1,6 +1,7 @@
 package youtrackbot.client;
 
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A class describing a YouTrack user account.
@@ -22,7 +23,7 @@ public class YouTrackUser {
         return login;
     }
 
-    public void setLogin(String login) {
+    public void setLogin(@NotNull String login) {
         this.login = login;
     }
 
@@ -38,7 +39,7 @@ public class YouTrackUser {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@NotNull String email) {
         this.email = email;
     }
 
