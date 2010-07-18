@@ -3,6 +3,7 @@ package youtrackbot.client;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Unit tests for the youtrack issue class.
@@ -28,7 +29,7 @@ public class YouTrackIssueTest {
     @Test
     public void testSetProject() throws Exception {
         issue.setProject("foo");
-        org.junit.Assert.assertEquals("foo", issue.getProject());
+        assertEquals("foo", issue.getProject());
     }
 
     @Test
