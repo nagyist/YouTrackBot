@@ -1,6 +1,7 @@
 package youtrackbot.client;
 
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
