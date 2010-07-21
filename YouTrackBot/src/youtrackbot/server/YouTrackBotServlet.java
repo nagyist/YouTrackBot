@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.SortedMap;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -20,6 +22,8 @@ import java.util.regex.Pattern;
  * @version $Id$
  */
 public class YouTrackBotServlet extends AbstractRobot {
+    // A debug flag for internal use.
+    private final static boolean DEBUG = true;
     @NonNls
     private final static String robotId = "youtrackbot@appspot.com";
     @NonNls
@@ -87,8 +91,12 @@ public class YouTrackBotServlet extends AbstractRobot {
             for (int key : elements.keySet()) {
                 Element e = elements.get(key);
                 if (e.isFormElement() && e.getType() == ElementType.INPUT && e.getProperty("name").equals(trackerUrlInputFieldName)) {
+                    deleteYouTrackInstance(instance);
+                    instance = new YouTrackInstance();
+                    instance.setId(waveId);
                     instance.setTrackerUrl(e.getProperty("value"));
-                    log.info("Value : " + e.getProperty("value") + " Instance : " + instance.getTrackerUrl());
+                    saveYouTrackInstance(instance);
+                    if (DEBUG) log.info("Value : " + e.getProperty("value") + " Instance : " + instance.getTrackerUrl());
                     break; // We don't need to go any further.
                 }
             } // for
@@ -98,7 +106,7 @@ public class YouTrackBotServlet extends AbstractRobot {
     @Override
     public void onWaveletSelfAdded(WaveletSelfAddedEvent event) {
         String waveId = event.getWavelet().getWaveId().toString();
-        log.info("Robot was added to wave " + waveId + ".");
+        if (DEBUG) log.info("Robot was added to wave " + waveId + ".");
         YouTrackInstance instance;
         try {
             instance = loadYouTrackInstance(waveId);
@@ -108,8 +116,8 @@ public class YouTrackBotServlet extends AbstractRobot {
             saveYouTrackInstance(instance);
         }
         Blip helloWorld = event.getWavelet().reply("\nHi everybody! Please use #XX-NN to link to existing tickets where XX is the shortcut for your project and NN the ticket number.\n\n");
-        helloWorld.appendMarkup("<p><em>To change the url for your YouTrack instance please enter it in the form below and click on the save button.</em></p>");
-        helloWorld.appendMarkup("<strong>Tracker URL</strong>");
+        helloWorld.appendMarkup("<i>To change the url for your YouTrack instance please enter it in the form below and click on the save button.</i>\n\n");
+        helloWorld.appendMarkup("<b>Tracker URL</b>");
         Element element = new Element(ElementType.INPUT);
         element.setProperty("name", trackerUrlInputFieldName);
         element.setProperty("type", "text");
@@ -126,13 +134,24 @@ public class YouTrackBotServlet extends AbstractRobot {
     @Override
     public void onWaveletSelfRemoved(WaveletSelfRemovedEvent event) {
         String waveId = event.getWavelet().getWaveId().toString();
-        log.info("Robot was removed from wave " + waveId + ".");
+        PersistenceManager pm = YouTrackBotPMF.getPmfInstance().getPersistenceManager();
+        Date removedAt = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (DEBUG) log.info("Robot was removed from wave " + waveId + " at " + format.format(removedAt) +".");
         YouTrackInstance instance;
         try {
             instance = loadYouTrackInstance(waveId);
+            YouTrackInstance newInstance = new YouTrackInstance();
+            newInstance.setId(waveId);
+            newInstance.setIssuePath(instance.getIssuePath());
+            newInstance.setTrackerUrl(instance.getTrackerUrl());
+            newInstance.setRemovedFromWaveDate(removedAt);
             deleteYouTrackInstance(instance);
+            saveYouTrackInstance(newInstance);
         } catch (JDOObjectNotFoundException e) {
-            log.info("No saved instance found for this wave.");
+            if (DEBUG) log.info("No saved instance found for this wave!");
+        } finally {
+            pm.close();
         }
     }
 
@@ -145,7 +164,7 @@ public class YouTrackBotServlet extends AbstractRobot {
         PersistenceManager pm = YouTrackBotPMF.getPmfInstance().getPersistenceManager();
         try {
             pm.deletePersistent(pm.getObjectById(instance.getClass(), instance.getId()));
-            log.info("Deleted saved instance from database.");
+            if (DEBUG) log.info("Deleted saved instance from database.");
         } finally {
             pm.close();
         }

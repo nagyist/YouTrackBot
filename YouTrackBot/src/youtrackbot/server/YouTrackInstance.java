@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.jdo.annotations.*;
+import java.util.Date;
 
 /**
  * A class describing a YouTrack server instance.
@@ -21,6 +22,8 @@ public class YouTrackInstance {
     private String trackerUrl = "http://youtrack.jetbrains.net";
     @Persistent
     private String issuePath = "issue";
+    @Persistent
+    private Date removedFromWaveDate = null;
 
     @Nullable
     public String getId() {
@@ -45,5 +48,13 @@ public class YouTrackInstance {
 
     public void setIssuePath(@NotNull String issuePath) {
         this.issuePath = issuePath;
+    }
+
+    public Date getRemovedFromWaveDate() {
+        return removedFromWaveDate;
+    }
+
+    public void setRemovedFromWaveDate(@NotNull Date removedFromWaveDate) {
+        this.removedFromWaveDate = removedFromWaveDate;
     }
 }
