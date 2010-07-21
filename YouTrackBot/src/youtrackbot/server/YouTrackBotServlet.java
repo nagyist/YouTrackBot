@@ -134,21 +134,21 @@ public class YouTrackBotServlet extends AbstractRobot {
 //            deleteYouTrackInstance(instance);
 //        }
 //    }
-
-    /**
-     * Delete a YouTrack instance from the database.
-     *
-     * @param instance The instance to delete.
-     */
-    private void deleteYouTrackInstance(@NotNull YouTrackInstance instance) {
-        PersistenceManager pm = YouTrackBotPMF.getPmfInstance().getPersistenceManager();
-        try {
-            pm.deletePersistent(pm.getObjectById(instance.getClass(), instance.getId()));
-            log.info("Deleted saved instance from database.");
-        } finally {
-            pm.close();
-        }
-    }
+//
+//    /**
+//     * Delete a YouTrack instance from the database.
+//     *
+//     * @param instance The instance to delete.
+//     */
+//    private void deleteYouTrackInstance(@NotNull YouTrackInstance instance) {
+//        PersistenceManager pm = YouTrackBotPMF.getPmfInstance().getPersistenceManager();
+//        try {
+//            pm.deletePersistent(pm.getObjectById(instance.getClass(), instance.getId()));
+//            log.info("Deleted saved instance from database.");
+//        } finally {
+//            pm.close();
+//        }
+//    }
 
     /**
      * Loads a stored YouTrack instance from the database.
