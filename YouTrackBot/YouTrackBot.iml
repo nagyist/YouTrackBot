@@ -20,7 +20,7 @@
             <file path="$MODULE_DIR$/src" />
           </files-to-enhance>
           <run-enhancer-on-make>true</run-enhancer-on-make>
-          <sdk-home-path>C:/appengine-java-sdk-1.3.5</sdk-home-path>
+          <sdk-home-path>$MODULE_DIR$/../google-appengine-java</sdk-home-path>
           <email>jens.jahnke@googlemail.com</email>
         </configuration>
       </facet>
