@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Restlet for Google AppEngine">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/org.restlet.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/org.restlet.ext.net.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/org.restlet.ext.xml.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="http://www.restlet.org/documentation/snapshot/gae/api/" />
+      <root url="http://www.restlet.org/documentation/snapshot/gae/ext/" />
+      <root url="http://www.restlet.org/documentation/snapshot/gae/engine/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

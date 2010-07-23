@@ -40,6 +40,7 @@
     <orderEntry type="library" name="Java EE Servlet" level="project" />
     <orderEntry type="library" name="IntelliJ Idea Annotations" level="project" />
     <orderEntry type="library" name="JUnit4" level="application" />
+    <orderEntry type="library" name="Restlet for Google AppEngine" level="project" />
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">
     <option name="_basePreferences">
