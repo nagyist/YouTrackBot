@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  */
 public class YouTrackBotServlet extends AbstractRobot {
     // A debug flag for internal use.
-    private final static boolean DEBUG = true;
+    final static boolean DEBUG = true;
     @NonNls
     private final static String robotId = "youtrackbot@appspot.com";
     @NonNls
@@ -33,7 +33,7 @@ public class YouTrackBotServlet extends AbstractRobot {
     @NonNls
     private final static String trackerUrlInputFieldName = "youtrackbot-input-trackerurl";
     // This is for logging errors to the appengine logs.
-    private static final Logger log = Logger.getLogger(YouTrackBotServlet.class.getName());
+    final static Logger log = Logger.getLogger(YouTrackBotServlet.class.getName());
 
     @Override
     protected String getRobotName() {

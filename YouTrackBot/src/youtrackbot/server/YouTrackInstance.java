@@ -2,6 +2,7 @@ package youtrackbot.server;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import youtrackbot.client.YouTrackUser;
 
 import javax.jdo.annotations.*;
 import java.util.Date;
@@ -22,6 +23,8 @@ public class YouTrackInstance {
     private String trackerUrl = "http://youtrack.jetbrains.net";
     @Persistent
     private String issuePath = "issue";
+    @Persistent(defaultFetchGroup = "true")
+    private YouTrackUser login = null;
     @Persistent
     private Date removedFromWaveDate = null;
 
@@ -48,6 +51,16 @@ public class YouTrackInstance {
 
     public void setIssuePath(@NotNull String issuePath) {
         this.issuePath = issuePath;
+    }
+
+    @Nullable
+    public YouTrackUser getLogin() {
+        return login;
+    }
+
+    public void setLogin(@NotNull YouTrackUser login) {
+        login.setId(getId()); // We enforce our wave's id.
+        this.login = login;
     }
 
     public Date getRemovedFromWaveDate() {

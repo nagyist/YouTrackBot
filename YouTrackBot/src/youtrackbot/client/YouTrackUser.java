@@ -3,21 +3,40 @@ package youtrackbot.client;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+import javax.jdo.annotations.*;
+
 /**
  * A class describing a YouTrack user account.
  *
  * @author Jens Jahnke <jan0sch@gmx.net>
  * @version $Id$
  */
+@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class YouTrackUser {
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Unique
+    private String id;
+    @Persistent
     @NonNls
     private String login;
+    @Persistent
     @NonNls
     private String fullName;
+    @Persistent
     @NonNls
     private String email;
+    @Persistent
     @NonNls
     private String jabber;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getLogin() {
         return login;
