@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/cron/cleanupdatabase</url>
+    <description>Remove all saved configurations from the database that have been removed from their wave for at least 72 hours.</description>
+    <schedule>every 20 minutes</schedule>
+  </cron>
+</cronentries>

@@ -28,6 +28,36 @@ public class YouTrackInstance {
     @Persistent
     private Date removedFromWaveDate = null;
 
+    /**
+     * Default constructor.
+     */
+    public YouTrackInstance() {
+
+    }
+
+    /**
+     * Overloaded constructor to create an instance from an old one.
+     *
+     * @param instance The instance providing the settings for the new instance.
+     */
+    public YouTrackInstance(@NotNull YouTrackInstance instance) {
+        if (instance.getId() != null) {
+            setId(instance.getId());
+        }
+        if (instance.getTrackerUrl() != null) {
+            setTrackerUrl(instance.getTrackerUrl());
+        }
+        if (instance.getIssuePath() != null) {
+            setIssuePath(instance.getIssuePath());
+        }
+        if (instance.getLogin() != null) {
+            setLogin(instance.getLogin());
+        }
+        if (instance.getRemovedFromWaveDate() != null) {
+            setRemovedFromWaveDate(instance.getRemovedFromWaveDate());
+        }
+    }
+
     @Nullable
     public String getId() {
         return id;

@@ -40,6 +40,13 @@ public class YouTrackBotServlet extends AbstractRobot {
     // This is for logging errors to the appengine logs.
     final static Logger log = Logger.getLogger(YouTrackBotServlet.class.getName());
 
+    /**
+     * Default constructor.
+     */
+    public YouTrackBotServlet() {
+        super();
+    }
+
     @Override
     protected String getRobotName() {
         return "YouTrackBot";
@@ -95,17 +102,21 @@ public class YouTrackBotServlet extends AbstractRobot {
             SortedMap<Integer, Element> elements = event.getBlip().getElements();
             for (int key : elements.keySet()) {
                 Element e = elements.get(key);
-                if (e.isFormElement() && e.getType() == ElementType.INPUT && e.getProperty("name").equals(trackerUrlInputFieldName)) {
-                    deleteYouTrackInstance(instance);
-                    instance = new YouTrackInstance();
-                    instance.setId(waveId);
-                    instance.setTrackerUrl(e.getProperty("value"));
-                    saveYouTrackInstance(instance);
-                    if (DEBUG)
-                        log.info("Value : " + e.getProperty("value") + " Instance : " + instance.getTrackerUrl());
-                    break; // We don't need to go any further.
+                if (e.isFormElement()) {
+                    if (e.getType() == ElementType.INPUT) {
+                        if (e.getProperty("name").equals(trackerUrlInputFieldName)) {
+                            instance.setTrackerUrl(e.getProperty("value"));
+                        }
+                        if (e.getProperty("name").equals(trackerUserLoginFieldName)) {
+                            instance.getLogin().setLogin(e.getProperty("value"));
+                        }
+                    }
+                    if (e.getType() == ElementType.PASSWORD && e.getProperty("name").equals(trackerUserPasswordFieldName)) {
+                        instance.getLogin().setPassword(e.getProperty("value"));
+                    }
                 }
             } // for
+            appEngineSaveBugWorkaround(instance); //TODO Remove when the bug gets fixed.
         }
     }
 
@@ -118,6 +129,7 @@ public class YouTrackBotServlet extends AbstractRobot {
             instance = loadYouTrackInstance(waveId);
             if (instance.getRemovedFromWaveDate() != null) {
                 instance.setRemovedFromWaveDate(null);
+                instance = appEngineSaveBugWorkaround(instance); //TODO Remove when the bug gets fixed.
             }
         } catch (JDOObjectNotFoundException e) {
             instance = new YouTrackInstance();
@@ -168,13 +180,8 @@ public class YouTrackBotServlet extends AbstractRobot {
         YouTrackInstance instance;
         try {
             instance = loadYouTrackInstance(waveId);
-            YouTrackInstance newInstance = new YouTrackInstance();
-            newInstance.setId(waveId);
-            newInstance.setIssuePath(instance.getIssuePath());
-            newInstance.setTrackerUrl(instance.getTrackerUrl());
-            newInstance.setRemovedFromWaveDate(removedAt);
-            deleteYouTrackInstance(instance);
-            saveYouTrackInstance(newInstance);
+            instance.setRemovedFromWaveDate(removedAt);
+            appEngineSaveBugWorkaround(instance); //TODO Remove when the bug gets fixed.
         } catch (JDOObjectNotFoundException e) {
             if (DEBUG) log.info("No saved instance found for this wave!");
         } finally {
@@ -223,5 +230,20 @@ public class YouTrackBotServlet extends AbstractRobot {
         } finally {
             pm.close();
         }
+    }
+
+    /**
+     * Due to a bug in the appengine our persistent objects do not get written to the
+     * database after they are updated. So the changes are lost after the sessions ends.
+     * A workaround is to delete the object and re-create it.
+     *
+     * @param instance The YouTrack instance to be updated.
+     * @return The updated YouTrack instance.
+     */
+    private YouTrackInstance appEngineSaveBugWorkaround(@NotNull YouTrackInstance instance) {
+        YouTrackInstance updatedInstance = new YouTrackInstance(instance);
+        deleteYouTrackInstance(instance);
+        saveYouTrackInstance(updatedInstance);
+        return updatedInstance;
     }
 }

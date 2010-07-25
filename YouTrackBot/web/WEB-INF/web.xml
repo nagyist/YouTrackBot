@@ -12,4 +12,24 @@
         <servlet-name>YouTrackBot</servlet-name>
         <url-pattern>/_wave/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>Cronjobs</servlet-name>
+        <servlet-class>youtrackbot.server.YouTrackBotCronServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Cronjobs</servlet-name>
+        <url-pattern>/cron/*</url-pattern>
+    </servlet-mapping>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Cronjobs</web-resource-name>
+            <url-pattern>/cron/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>
