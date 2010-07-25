@@ -59,15 +59,15 @@ public class YouTrackInstance {
     }
 
     public void setLogin(@NotNull YouTrackUser login) {
-        login.setId(getId()); // We enforce our wave's id.
         this.login = login;
     }
 
+    @Nullable
     public Date getRemovedFromWaveDate() {
         return removedFromWaveDate;
     }
 
-    public void setRemovedFromWaveDate(@NotNull Date removedFromWaveDate) {
+    public void setRemovedFromWaveDate(Date removedFromWaveDate) {
         this.removedFromWaveDate = removedFromWaveDate;
     }
 }

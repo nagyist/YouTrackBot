@@ -1,5 +1,6 @@
 package youtrackbot.client;
 
+import com.google.appengine.api.datastore.Key;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +17,7 @@ public class YouTrackUser {
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Unique
-    private String id;
+    private Key id;
     @Persistent
     @NonNls
     private String login;
@@ -33,11 +34,11 @@ public class YouTrackUser {
     @NonNls
     private String password;
 
-    public String getId() {
+    public Key getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NotNull Key id) {
         this.id = id;
     }
 

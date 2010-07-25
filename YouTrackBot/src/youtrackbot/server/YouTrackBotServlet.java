@@ -101,7 +101,8 @@ public class YouTrackBotServlet extends AbstractRobot {
                     instance.setId(waveId);
                     instance.setTrackerUrl(e.getProperty("value"));
                     saveYouTrackInstance(instance);
-                    if (DEBUG) log.info("Value : " + e.getProperty("value") + " Instance : " + instance.getTrackerUrl());
+                    if (DEBUG)
+                        log.info("Value : " + e.getProperty("value") + " Instance : " + instance.getTrackerUrl());
                     break; // We don't need to go any further.
                 }
             } // for
@@ -115,6 +116,9 @@ public class YouTrackBotServlet extends AbstractRobot {
         YouTrackInstance instance;
         try {
             instance = loadYouTrackInstance(waveId);
+            if (instance.getRemovedFromWaveDate() != null) {
+                instance.setRemovedFromWaveDate(null);
+            }
         } catch (JDOObjectNotFoundException e) {
             instance = new YouTrackInstance();
             instance.setId(waveId);
@@ -134,7 +138,7 @@ public class YouTrackBotServlet extends AbstractRobot {
         element = new Element(ElementType.INPUT);
         element.setProperty("name", trackerUserLoginFieldName);
         element.setProperty("type", "text");
-        element.setProperty("maxlength", "32");
+        element.setProperty("maxlength", "64");
         if (login != null) {
             element.setProperty("value", login.getLogin());
         }
@@ -146,6 +150,7 @@ public class YouTrackBotServlet extends AbstractRobot {
         if (login != null) {
             element.setProperty("value", login.getPassword());
         }
+        helloWorld.append(element);
         element = new Element(ElementType.BUTTON);
         element.setProperty("name", submitButtonName);
         element.setProperty("value", "Save");
@@ -159,7 +164,7 @@ public class YouTrackBotServlet extends AbstractRobot {
         PersistenceManager pm = YouTrackBotPMF.getPmfInstance().getPersistenceManager();
         Date removedAt = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (DEBUG) log.info("Robot was removed from wave " + waveId + " at " + format.format(removedAt) +".");
+        if (DEBUG) log.info("Robot was removed from wave " + waveId + " at " + format.format(removedAt) + ".");
         YouTrackInstance instance;
         try {
             instance = loadYouTrackInstance(waveId);
@@ -197,7 +202,8 @@ public class YouTrackBotServlet extends AbstractRobot {
      *
      * @param waveId The wave id which is the id of the YouTrack instance.
      * @return A YouTrack instance or {@code null}.
-     * @throws javax.jdo.JDOObjectNotFoundException An exception is thrown if the object is not found in the database.
+     * @throws javax.jdo.JDOObjectNotFoundException
+     *          An exception is thrown if the object is not found in the database.
      */
     @Nullable
     private YouTrackInstance loadYouTrackInstance(String waveId) throws JDOObjectNotFoundException {
