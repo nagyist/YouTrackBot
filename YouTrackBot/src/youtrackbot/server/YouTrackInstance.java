@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import youtrackbot.client.YouTrackUser;
 
+import javax.jdo.JDOObjectNotFoundException;
+import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.*;
 import java.util.Date;
 
@@ -23,8 +25,6 @@ public class YouTrackInstance {
     private String trackerUrl = "http://youtrack.jetbrains.net";
     @Persistent
     private String issuePath = "issue";
-    @Persistent
-    private YouTrackUser login = new YouTrackUser();
     @Persistent
     private Date removedFromWaveDate = null;
 
@@ -84,11 +84,34 @@ public class YouTrackInstance {
     }
 
     public YouTrackUser getLogin() {
+        YouTrackUser login;
+        PersistenceManager pm = YouTrackBotPMF.getPmfInstance().getPersistenceManager();
+        try {
+            login = pm.getObjectById(YouTrackUser.class, getId());
+        } catch (JDOObjectNotFoundException e) {
+            login = new YouTrackUser();
+            if (getId() != null) {
+                login.setId(getId());
+            }
+        } finally {
+            pm.close();
+        }
         return login;
     }
 
     public void setLogin(@NotNull YouTrackUser login) {
-        this.login = login;
+        PersistenceManager pm = YouTrackBotPMF.getPmfInstance().getPersistenceManager();
+        try {
+            pm.currentTransaction().begin();
+            login.setId(getId());
+            pm.makePersistent(login);
+            pm.currentTransaction().commit();
+        } catch (Exception e) {
+            pm.currentTransaction().rollback();
+            throw new RuntimeException(e);
+        } finally {
+            pm.close();
+        }
     }
 
     @Nullable

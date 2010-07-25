@@ -92,6 +92,7 @@ public class YouTrackBotServlet extends AbstractRobot {
         if (event.getButtonName().equals(submitButtonName)) {
             String waveId = event.getWavelet().getWaveId().toString();
             YouTrackInstance instance;
+            YouTrackUser login;
             try {
                 instance = loadYouTrackInstance(waveId);
             } catch (JDOObjectNotFoundException e) {
@@ -108,11 +109,15 @@ public class YouTrackBotServlet extends AbstractRobot {
                             instance.setTrackerUrl(e.getProperty("value"));
                         }
                         if (e.getProperty("name").equals(trackerUserLoginFieldName)) {
-                            instance.getLogin().setLogin(e.getProperty("value"));
+                            login = instance.getLogin();
+                            login.setLogin(e.getProperty("value"));
+                            instance.setLogin(login);
                         }
                     }
                     if (e.getType() == ElementType.PASSWORD && e.getProperty("name").equals(trackerUserPasswordFieldName)) {
-                        instance.getLogin().setPassword(e.getProperty("value"));
+                        login = instance.getLogin();
+                        login.setPassword(e.getProperty("value"));
+                        instance.setLogin(login);
                     }
                 }
             } // for
@@ -245,11 +250,15 @@ public class YouTrackBotServlet extends AbstractRobot {
      */
     private void appEngineSaveBugWorkaround(@NotNull YouTrackInstance instance) {
         PersistenceManager pm = YouTrackBotPMF.getPmfInstance().getPersistenceManager();
+        YouTrackInstance updatedInstance;
+        try {
+            updatedInstance = pm.getObjectById(YouTrackInstance.class, instance.getId());
+        } catch (JDOObjectNotFoundException e) {
+            updatedInstance = new YouTrackInstance(instance);
+        }
         try {
             pm.currentTransaction().begin();
-            YouTrackInstance updatedInstance = pm.getObjectById(YouTrackInstance.class, instance.getId());
             updatedInstance.setIssuePath(instance.getIssuePath());
-            updatedInstance.setLogin(instance.getLogin());
             if (instance.getRemovedFromWaveDate() != null) {
                 updatedInstance.setRemovedFromWaveDate(instance.getRemovedFromWaveDate());
             }
@@ -262,5 +271,6 @@ public class YouTrackBotServlet extends AbstractRobot {
         } finally {
             pm.close();
         }
+        updatedInstance.setLogin(instance.getLogin());
     }
 }
