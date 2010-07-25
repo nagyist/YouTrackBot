@@ -45,6 +45,7 @@ public class YouTrackBotCronServlet extends HttpServlet {
         Query query = pm.newQuery(YouTrackInstance.class);
         query.setFilter("removedFromWaveDate < dateParameter");
         query.declareParameters("Date dateParameter");
+        query.declareImports("import java.util.Date");
         try {
             List<YouTrackInstance> rows = (List<YouTrackInstance>) query.execute(date);
             if (rows.iterator().hasNext()) {

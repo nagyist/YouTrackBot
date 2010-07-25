@@ -3,6 +3,6 @@
   <cron>
     <url>/cron/cleanupdatabase</url>
     <description>Remove all saved configurations from the database that have been removed from their wave for at least 72 hours.</description>
-    <schedule>every 20 minutes</schedule>
+    <schedule>every 40 minutes</schedule>
   </cron>
 </cronentries>
