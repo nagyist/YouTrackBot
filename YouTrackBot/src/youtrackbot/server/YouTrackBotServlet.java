@@ -5,6 +5,7 @@ import com.google.wave.api.event.*;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import youtrackbot.client.YouTrackUser;
 
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
@@ -32,6 +33,10 @@ public class YouTrackBotServlet extends AbstractRobot {
     private final static String submitButtonName = "youtrackbot-button-submit";
     @NonNls
     private final static String trackerUrlInputFieldName = "youtrackbot-input-trackerurl";
+    @NonNls
+    private final static String trackerUserLoginFieldName = "youtrackbot-input-trackerlogin";
+    @NonNls
+    private final static String trackerUserPasswordFieldName = "youtrackbot-input-trackerpassword";
     // This is for logging errors to the appengine logs.
     final static Logger log = Logger.getLogger(YouTrackBotServlet.class.getName());
 
@@ -116,14 +121,31 @@ public class YouTrackBotServlet extends AbstractRobot {
             saveYouTrackInstance(instance);
         }
         Blip helloWorld = event.getWavelet().reply("\nHi everybody! Please use #XX-NN to link to existing tickets where XX is the shortcut for your project and NN the ticket number.\n\n");
-        helloWorld.appendMarkup("<i>To change the url for your YouTrack instance please enter it in the form below and click on the save button.</i>\n\n");
-        helloWorld.appendMarkup("<b>Tracker URL</b>");
+        helloWorld.appendMarkup("<em>To change the url for your YouTrack instance please enter it in the form below and click on the save button.</em>\n\n");
+        helloWorld.appendMarkup("<strong>Tracker URL</strong>");
         Element element = new Element(ElementType.INPUT);
         element.setProperty("name", trackerUrlInputFieldName);
         element.setProperty("type", "text");
         element.setProperty("maxlength", "254");
         element.setProperty("value", instance.getTrackerUrl());
         helloWorld.append(element);
+        YouTrackUser login = instance.getLogin();
+        helloWorld.appendMarkup("<strong>Login</strong>");
+        element = new Element(ElementType.INPUT);
+        element.setProperty("name", trackerUserLoginFieldName);
+        element.setProperty("type", "text");
+        element.setProperty("maxlength", "32");
+        if (login != null) {
+            element.setProperty("value", login.getLogin());
+        }
+        helloWorld.append(element);
+        helloWorld.appendMarkup("<strong>Password</strong>");
+        element = new Element(ElementType.PASSWORD);
+        element.setProperty("name", trackerUserPasswordFieldName);
+        element.setProperty("maxlength", "254");
+        if (login != null) {
+            element.setProperty("value", login.getPassword());
+        }
         element = new Element(ElementType.BUTTON);
         element.setProperty("name", submitButtonName);
         element.setProperty("value", "Save");

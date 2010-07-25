@@ -29,6 +29,9 @@ public class YouTrackUser {
     @Persistent
     @NonNls
     private String jabber;
+    @Persistent
+    @NonNls
+    private String password;
 
     public String getId() {
         return id;
@@ -68,5 +71,13 @@ public class YouTrackUser {
 
     public void setJabber(String jabber) {
         this.jabber = jabber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
