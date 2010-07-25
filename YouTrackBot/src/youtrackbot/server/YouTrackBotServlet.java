@@ -129,7 +129,7 @@ public class YouTrackBotServlet extends AbstractRobot {
             instance = loadYouTrackInstance(waveId);
             if (instance.getRemovedFromWaveDate() != null) {
                 instance.setRemovedFromWaveDate(null);
-                instance = appEngineSaveBugWorkaround(instance); //TODO Remove when the bug gets fixed.
+                appEngineSaveBugWorkaround(instance); //TODO Remove when the bug gets fixed.
             }
         } catch (JDOObjectNotFoundException e) {
             instance = new YouTrackInstance();
@@ -197,8 +197,12 @@ public class YouTrackBotServlet extends AbstractRobot {
     private void deleteYouTrackInstance(@NotNull YouTrackInstance instance) {
         PersistenceManager pm = YouTrackBotPMF.getPmfInstance().getPersistenceManager();
         try {
+            pm.currentTransaction().begin();
             pm.deletePersistent(pm.getObjectById(instance.getClass(), instance.getId()));
+            pm.currentTransaction().commit();
             if (DEBUG) log.info("Deleted saved instance from database.");
+        } catch (Exception e) {
+            pm.currentTransaction().rollback();
         } finally {
             pm.close();
         }
@@ -238,12 +242,25 @@ public class YouTrackBotServlet extends AbstractRobot {
      * A workaround is to delete the object and re-create it.
      *
      * @param instance The YouTrack instance to be updated.
-     * @return The updated YouTrack instance.
      */
-    private YouTrackInstance appEngineSaveBugWorkaround(@NotNull YouTrackInstance instance) {
-        YouTrackInstance updatedInstance = new YouTrackInstance(instance);
-        deleteYouTrackInstance(instance);
-        saveYouTrackInstance(updatedInstance);
-        return updatedInstance;
+    private void appEngineSaveBugWorkaround(@NotNull YouTrackInstance instance) {
+        PersistenceManager pm = YouTrackBotPMF.getPmfInstance().getPersistenceManager();
+        try {
+            pm.currentTransaction().begin();
+            YouTrackInstance updatedInstance = pm.getObjectById(YouTrackInstance.class, instance.getId());
+            updatedInstance.setIssuePath(instance.getIssuePath());
+            updatedInstance.setLogin(instance.getLogin());
+            if (instance.getRemovedFromWaveDate() != null) {
+                updatedInstance.setRemovedFromWaveDate(instance.getRemovedFromWaveDate());
+            }
+            updatedInstance.setTrackerUrl(instance.getTrackerUrl());
+            pm.makePersistent(updatedInstance);
+            pm.currentTransaction().commit();
+        } catch (Exception e) {
+            pm.currentTransaction().rollback();
+            throw new RuntimeException(e);
+        } finally {
+            pm.close();
+        }
     }
 }

@@ -23,8 +23,8 @@ public class YouTrackInstance {
     private String trackerUrl = "http://youtrack.jetbrains.net";
     @Persistent
     private String issuePath = "issue";
-    @Persistent(defaultFetchGroup = "true")
-    private YouTrackUser login = null;
+    @Persistent
+    private YouTrackUser login = new YouTrackUser();
     @Persistent
     private Date removedFromWaveDate = null;
 
@@ -83,7 +83,6 @@ public class YouTrackInstance {
         this.issuePath = issuePath;
     }
 
-    @Nullable
     public YouTrackUser getLogin() {
         return login;
     }

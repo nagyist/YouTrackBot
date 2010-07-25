@@ -35,6 +35,7 @@ public class YouTrackBotCronServlet extends HttpServlet {
     /**
      * Parse the database and remove all old ent
      */
+    @SuppressWarnings("unchecked")
     public void cleanupDatabase() {
         Calendar cal = Calendar.getInstance();
         Date date = new Date();
@@ -47,6 +48,7 @@ public class YouTrackBotCronServlet extends HttpServlet {
         query.declareParameters("Date dateParameter");
         query.declareImports("import java.util.Date");
         try {
+            pm.currentTransaction().begin();
             List<YouTrackInstance> rows = (List<YouTrackInstance>) query.execute(date);
             if (rows.iterator().hasNext()) {
                 YouTrackBotServlet.log.info("Cronjob is going to delete " + rows.size() + " instances from database.");
@@ -54,8 +56,13 @@ public class YouTrackBotCronServlet extends HttpServlet {
                     pm.deletePersistent(pm.getObjectById(YouTrackInstance.class, i.getId()));
                 } // for
             }
+            pm.currentTransaction().commit();
+        } catch (Exception e) {
+            pm.currentTransaction().rollback();
+            throw new RuntimeException(e);
         } finally {
             query.closeAll();
+            pm.close();
         }
     }
 }
