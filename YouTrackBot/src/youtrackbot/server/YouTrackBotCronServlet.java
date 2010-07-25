@@ -49,7 +49,7 @@ public class YouTrackBotCronServlet extends HttpServlet {
         try {
             List<YouTrackInstance> rows = (List<YouTrackInstance>) query.execute(date);
             if (rows.iterator().hasNext()) {
-                YouTrackBotServlet.log.info("Cron: Going to delete " + rows.size() + " instances from database.");
+                YouTrackBotServlet.log.info("Cronjob is going to delete " + rows.size() + " instances from database.");
                 for (YouTrackInstance i : rows) {
                     pm.deletePersistent(pm.getObjectById(YouTrackInstance.class, i.getId()));
                 } // for
