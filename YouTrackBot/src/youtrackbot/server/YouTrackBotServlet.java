@@ -155,7 +155,7 @@ public class YouTrackBotServlet extends AbstractRobot {
         element = new Element(ElementType.INPUT);
         element.setProperty("name", trackerUserLoginFieldName);
         element.setProperty("type", "text");
-        element.setProperty("maxlength", "64");
+        element.setProperty("maxlength", "50");
         if (login != null) {
             element.setProperty("value", login.getLogin());
         }

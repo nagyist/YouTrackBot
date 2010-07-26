@@ -13,6 +13,8 @@ import javax.jdo.annotations.*;
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class YouTrackUser {
+    private final static int loginMaxLength = 50;
+    private final static int fullNameMaxLength = 50;
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Unique
@@ -46,6 +48,9 @@ public class YouTrackUser {
     }
 
     public void setLogin(@NotNull String login) {
+        if (login.length() > loginMaxLength) {
+            throw new RuntimeException("Maximum length for parameter login exceeded (" + loginMaxLength + " characters)!");
+        }
         this.login = login;
     }
 
@@ -54,6 +59,9 @@ public class YouTrackUser {
     }
 
     public void setFullName(String fullName) {
+        if (fullName.length() > fullNameMaxLength) {
+            throw new RuntimeException("Maximum length for parameter fullName exceeded (" + fullNameMaxLength + " characters)!");
+        }
         this.fullName = fullName;
     }
 
