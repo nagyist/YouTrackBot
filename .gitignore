@@ -1,0 +1,7 @@
+# Ignore the IntelliJ Idea workspace file as it causes conflicts.
+.idea/workspace.xml
+# Ignore output directory for compiled code.
+out/**
+# Ignore generated javadoc.
+javadoc.zip
+
